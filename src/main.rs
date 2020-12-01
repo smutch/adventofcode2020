@@ -8,7 +8,6 @@ struct Cli {
 }
 
 fn main() {
-
     let args = Cli::from_args();
 
     let input: Vec<_> = std::fs::read_to_string(args.input)
@@ -33,7 +32,9 @@ fn main() {
                 break;
             }
         }
-        if v[0] == *x { break; }
+        if v[0] == *x {
+            break;
+        }
     }
 
     println!("Product = {}", v[0] * v[1]);
@@ -46,7 +47,7 @@ fn main() {
         for (jj, y) in input[ii..].iter().enumerate() {
             if *y < remaining {
                 let remaining = remaining - y;
-                for z in input[ii+jj..].iter() {
+                for z in input[ii + jj..].iter() {
                     if *z == remaining {
                         println!("{} + {} + {} = {}", x, y, z, target);
                         v = [*x, *y, *z];
@@ -54,11 +55,14 @@ fn main() {
                     }
                 }
             }
-            if v[1] == *y {break;}
+            if v[1] == *y {
+                break;
+            }
         }
-        if v[0] == *x { break; }
+        if v[0] == *x {
+            break;
+        }
     }
     println!("Product = {}", v[0] * v[1] * v[2]);
     println!("----------\n");
-
 }
