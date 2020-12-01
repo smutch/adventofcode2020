@@ -20,14 +20,15 @@ fn main() {
     // let's start dumb...
     // x + y = target
     let target = 2020i32;
+
+    println!("Part 1 ---");
     let mut v = [-1i32, -1i32];
     for (ii, x) in input.iter().enumerate() {
         let y_target = target - x;
         let input2 = &input[ii..];
         for y in input2 {
-            // println!("Checking y = {} == {}", *y, y_target);
             if *y == y_target {
-                println!("Found {} + {} = {}", x, y, target);
+                println!("{} + {} = {}", x, y, target);
                 v = [*x, *y];
                 break;
             }
@@ -36,5 +37,28 @@ fn main() {
     }
 
     println!("Product = {}", v[0] * v[1]);
+    println!("----------\n");
+
+    println!("Part 2 ---");
+    let mut v = [-1i32, -1i32, -1i32];
+    for (ii, x) in input.iter().enumerate() {
+        let remaining = target - x;
+        for (jj, y) in input[ii..].iter().enumerate() {
+            if *y < remaining {
+                let remaining = remaining - y;
+                for z in input[ii+jj..].iter() {
+                    if *z == remaining {
+                        println!("{} + {} + {} = {}", x, y, z, target);
+                        v = [*x, *y, *z];
+                        break;
+                    }
+                }
+            }
+            if v[1] == *y {break;}
+        }
+        if v[0] == *x { break; }
+    }
+    println!("Product = {}", v[0] * v[1] * v[2]);
+    println!("----------\n");
 
 }
