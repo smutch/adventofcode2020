@@ -8,6 +8,7 @@ struct Cli {
     input: std::path::PathBuf,
 }
 
+#[derive(Debug)]
 struct Entry {
     min: usize,
     max: usize,
@@ -46,6 +47,8 @@ fn main() {
         .map(|l| Entry::parse(l))
         .collect();
 
+    // Part 1 {{{
+    println!("=== Part 1 ===");
     let mut valid: u32 = 0;
     let mut invalid: u32 = 0;
     for entry in &input {
@@ -64,4 +67,20 @@ fn main() {
     assert_eq!(valid + invalid, input.len().try_into().unwrap());
 
     println!("N valid passwords = {}(/{})", valid, input.len());
+    println!("==============\n");
+    // }}}
+
+    // Part 2 {{{
+    println!("=== Part 2 ===");
+    let valid = (&input)
+        .into_iter()
+        .filter(|entry| {
+            (entry.password.chars().nth(entry.min-1).unwrap() == entry.letter)
+                ^ (entry.password.chars().nth(entry.max-1).unwrap() == entry.letter)
+        })
+        .count();
+
+    println!("N valid passwords = {:?}(/{})", valid, input.len());
+    println!("==============\n");
+    // }}}
 }
