@@ -7,37 +7,28 @@ struct Cli {
     input: std::path::PathBuf,
 }
 
-enum TerrainType {
-    Empty,
-    Tree
-}
-
-struct Map {
-    raw: String,
-    // terrain: Vec<TerrainType>,
-    height: usize,
-    width: usize,
-    pos: (usize, usize)
-}
-
-impl Map {
-
-    fn new(fname: std::path::PathBuf) -> Map {
-        let raw = String::from(std::fs::read_to_string(fname).expect("Failed to read input file."));
-        let height = raw.lines().count();
-        let width = raw.lines().next().unwrap().len();
-        let pos = (0usize, 0usize);
-
-        Map {raw, height, width, pos}
-    }
-}
-
 fn main() {
     let args = Cli::from_args();
-    let map = Map::new(args.input);
+    let input = std::fs::read_to_string(args.input).expect("Failed to read input file.");
 
-    println!("map height = {}, width = {} (periodic)", map.height, map.width);
+    // let height = input.lines().count();
+    let width = input.lines().next().unwrap().len();
+    let mut pos = (0usize, 0usize);
+    let movement = (3i16, 1i16);
 
-    // let movement = (3i32, 1i32);
+    let ntrees = input
+        .lines()
+        .step_by(movement.1 as usize)
+        .fold(0, |count, line| {
+            println!("{},{} -> {}", pos.0, pos.1, line.chars().nth(pos.0).unwrap());
+            let mut new_count = count;
+            if line.chars().nth(pos.0).unwrap() == '#' {
+                new_count += 1;
+            }
+            pos.0 = (pos.0 + movement.0 as usize) % width;
+            pos.1 += movement.1 as usize;
+            new_count
+        });
 
+    println!("Hit {} trees!", ntrees);
 }
